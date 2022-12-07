@@ -1,5 +1,6 @@
 package org.apache.nifi.pojo;
 
+import org.apache.nifi.serialization.record.RecordField;
 import org.apache.nifi.serialization.record.RecordSchema;
 import org.apache.nifi.serialization.record.SchemaIdentifier;
 import org.apache.nifi.serialization.record.StandardSchemaIdentifier;
@@ -9,11 +10,13 @@ import org.apache.nifi.util.TestRunners;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class PojoSchemaRegistryServiceTest {
     private TestRunner testRunner;
@@ -58,5 +61,25 @@ public class PojoSchemaRegistryServiceTest {
         assertNotNull(result.getField("username"));
         assertNotNull(result.getField("password"));
         assertNotNull(result.getField("failedLoginCount"));
+    }
+
+    @Test
+    public void testAnnotatedPojoSchema() {
+        testRunner.setProperty(service, "object", "org.apache.nifi.pojo.AnnotatedObject");
+        testRunner.enableControllerService(service);
+
+        SchemaIdentifier identifier = new StandardSchemaIdentifier.Builder()
+                .name("object")
+                .build();
+        AtomicReference<RecordSchema> schema = new AtomicReference<>();
+        assertDoesNotThrow(() -> schema.set(service.retrieveSchema(identifier)));
+        RecordSchema result = schema.get();
+        assertEquals(3, result.getFieldNames().size());
+        Optional<RecordField> aliasedField = result.getField("multipleAliases");
+        Optional<RecordField> nullable = result.getField("nullable");
+
+        assertTrue(renamed.isPresent());
+        assertTrue(aliasedField.isPresent());
+        assertTrue(nullable.isPresent());
     }
 }
