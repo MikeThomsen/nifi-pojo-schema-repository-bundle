@@ -77,9 +77,10 @@ public class PojoSchemaRegistryServiceTest {
         assertEquals(3, result.getFieldNames().size());
         Optional<RecordField> aliasedField = result.getField("multipleAliases");
         Optional<RecordField> nullable = result.getField("nullable");
+        Optional<RecordField> renamed = result.getField("renamed");
 
-        assertTrue(renamed.isPresent());
         assertTrue(aliasedField.isPresent());
         assertTrue(nullable.isPresent());
+        assertTrue(renamed.isPresent());
     }
 }
