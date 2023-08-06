@@ -117,7 +117,13 @@ public class PojoSchemaRegistryService extends AbstractControllerService impleme
 
     @Override
     public RecordSchema retrieveSchema(SchemaIdentifier schemaIdentifier) throws IOException, SchemaNotFoundException {
-        return null;
+        if (!schemaIdentifier.getName().isPresent()) {
+            throw new SchemaNotFoundException("Missing schema name");
+        }
+
+        String name = schemaIdentifier.getName().get();
+
+        return SCHEMA_CACHE.get(name);
     }
 
     @Override
