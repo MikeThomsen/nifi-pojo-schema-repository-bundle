@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.avro.AvroFactory;
 import com.fasterxml.jackson.dataformat.avro.AvroSchema;
 import com.fasterxml.jackson.dataformat.avro.schema.AvroSchemaGenerator;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.apache.avro.Schema;
 import org.apache.nifi.annotation.lifecycle.OnEnabled;
 import org.apache.nifi.avro.AvroTypeUtil;
@@ -14,13 +15,14 @@ import org.apache.nifi.controller.AbstractControllerService;
 import org.apache.nifi.controller.ConfigurationContext;
 import org.apache.nifi.expression.ExpressionLanguageScope;
 import org.apache.nifi.processor.exception.ProcessException;
+import org.apache.nifi.processor.util.StandardValidators;
 import org.apache.nifi.schema.access.SchemaField;
 import org.apache.nifi.schema.access.SchemaNotFoundException;
 import org.apache.nifi.schemaregistry.services.SchemaRegistry;
 import org.apache.nifi.serialization.record.RecordSchema;
 import org.apache.nifi.serialization.record.SchemaIdentifier;
+import org.apache.nifi.util.file.classloader.ClassLoaderUtils;
 
-import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.Collections;
@@ -39,8 +41,8 @@ public class PojoSchemaRegistryService extends AbstractControllerService impleme
         .description("A comma-separated list of Java JAR files to be loaded for schema generation.")
         .dynamicallyModifiesClasspath(true)
         .defaultValue("")
-        .addValidator(Validator.VALID)
-        .required(false)
+        .addValidator(StandardValidators.FILE_EXISTS_VALIDATOR)
+        .required(true)
         .build();
 
     public static final List<PropertyDescriptor> DESCRIPTOR_LIST = Collections.unmodifiableList(Arrays.asList(
@@ -56,11 +58,17 @@ public class PojoSchemaRegistryService extends AbstractControllerService impleme
 
     @OnEnabled
     public void onEnabled(final ConfigurationContext context) {
+        String modulePath = context.getProperty(EXTENSION_JARS).evaluateAttributeExpressions().getValue();
         Map<String, RecordSchema> temp = new ConcurrentHashMap<>();
         context.getProperties().keySet().stream().filter(prop -> prop.isDynamic())
             .forEach(prop -> {
                 try {
-                    Class clz = Class.forName(context.getProperty(prop).evaluateAttributeExpressions().getValue());
+                    ClassLoader loader = ClassLoaderUtils.getCustomClassLoader(modulePath,
+                            this.getClass().getClassLoader(), null);
+
+                            //Thread.currentThread().getContextClassLoader();
+                    String name = context.getProperty(prop).evaluateAttributeExpressions().getValue();
+                    Class clz = Class.forName(name, true, loader);
                     Schema schema = convertSchema(clz);
                     temp.put(prop.getName(), AvroTypeUtil.createSchema(schema));
                 } catch (Exception ex) {
@@ -81,11 +89,16 @@ public class PojoSchemaRegistryService extends AbstractControllerService impleme
         }
 
         ObjectMapper mapper = new ObjectMapper(new AvroFactory());
+        mapper.registerModule(new JavaTimeModule());
         AvroSchemaGenerator gen = new AvroSchemaGenerator();
         mapper.acceptJsonFormatVisitor(clz, gen);
         AvroSchema schemaWrapper = gen.getGeneratedSchema();
 
-        return schemaWrapper.getAvroSchema();
+        Schema retVal = schemaWrapper.getAvroSchema();
+
+        getLogger().debug("Generated this for {}:\n\n{}\n\n", clz.getName(), retVal.toString(true));
+
+        return retVal;
     }
 
     @Override
@@ -93,28 +106,32 @@ public class PojoSchemaRegistryService extends AbstractControllerService impleme
         return new PropertyDescriptor.Builder()
                 .name(name)
                 .expressionLanguageSupported(ExpressionLanguageScope.VARIABLE_REGISTRY)
-                .addValidator((subject, input, context) -> {
-                    ValidationResult result;
-                    try {
-                        Class.forName(input);
-                        result = new ValidationResult.Builder()
-                                .valid(true)
-                                .build();
-                    } catch (Exception ex) {
-                        result = new ValidationResult.Builder()
-                                .input(input)
-                                .subject(subject)
-                                .explanation(ex.getMessage())
-                                .valid(false)
-                                .build();
-                    }
-                    return result;
-                })
+                .dynamic(true)
+                .addValidator(Validator.VALID)
+//                .addValidator((subject, input, context) -> {
+//                    ValidationResult result;
+//                    ClassLoader loader = Thread.currentThread().getContextClassLoader();
+//
+//                    try {
+//                        Class.forName(input, true, loader);
+//                        result = new ValidationResult.Builder()
+//                                .valid(true)
+//                                .build();
+//                    } catch (Exception ex) {
+//                        result = new ValidationResult.Builder()
+//                                .input(input)
+//                                .subject(subject)
+//                                .explanation(ex.getMessage())
+//                                .valid(false)
+//                                .build();
+//                    }
+//                    return result;
+//                })
                 .build();
     }
 
     @Override
-    public RecordSchema retrieveSchema(SchemaIdentifier schemaIdentifier) throws IOException, SchemaNotFoundException {
+    public RecordSchema retrieveSchema(SchemaIdentifier schemaIdentifier) throws SchemaNotFoundException {
         if (!schemaIdentifier.getName().isPresent()) {
             throw new SchemaNotFoundException("Missing schema name");
         }

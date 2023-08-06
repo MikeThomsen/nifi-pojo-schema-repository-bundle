@@ -34,12 +34,12 @@
     <parent>
         <groupId>org.apache.nifi</groupId>
         <artifactId>nifi-pojo-schema-repository-bundle</artifactId>
-        <version>1.0.0</version>
+        <version>1.23.0</version>
     </parent>
 
     <groupId>org.apache.nifi</groupId>
     <artifactId>test-pojos</artifactId>
-    <version>1.0.0</version>
+    <version>1.23.0</version>
     <packaging>jar</packaging>
 
     <dependencies>

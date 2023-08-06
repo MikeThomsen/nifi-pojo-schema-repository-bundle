@@ -5,12 +5,12 @@
     <parent>
         <groupId>org.apache.nifi</groupId>
         <artifactId>nifi-pojo-schema-repository-bundle</artifactId>
-        <version>1.0.0</version>
+        <version>1.23.0</version>
     </parent>
 
     <groupId>org.apache.nifi</groupId>
     <artifactId>nifi-pojo-schema-repository</artifactId>
-    <version>1.0.0</version>
+    <version>1.23.0</version>
     <packaging>jar</packaging>
 
     <dependencies>
@@ -45,15 +45,20 @@
             <artifactId>jackson-dataformat-avro</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.codehaus.groovy</groupId>
-            <artifactId>groovy-all</artifactId>
-            <type>pom</type>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
             <groupId>org.apache.nifi</groupId>
             <artifactId>nifi-schema-registry-service-api</artifactId>
             <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.datatype</groupId>
+            <artifactId>jackson-datatype-jsr310</artifactId>
+        </dependency>
+
+        <!--	Java 8 Datatypes	-->
+        <dependency>
+            <groupId>com.fasterxml.jackson.datatype</groupId>
+            <artifactId>jackson-datatype-jdk8</artifactId>
         </dependency>
 
         <dependency>

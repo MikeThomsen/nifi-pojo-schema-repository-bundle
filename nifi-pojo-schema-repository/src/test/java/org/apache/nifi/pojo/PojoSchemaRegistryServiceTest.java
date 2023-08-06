@@ -27,7 +27,7 @@ public class PojoSchemaRegistryServiceTest {
         testRunner = TestRunners.newTestRunner(NoOpProcessor.class);
         service = new PojoSchemaRegistryService();
         testRunner.addControllerService("service", service);
-        testRunner.setProperty(service, PojoSchemaRegistryService.EXTENSION_JARS, "target/lib/test-pojos-1.0.0");
+        testRunner.setProperty(service, PojoSchemaRegistryService.EXTENSION_JARS, "target/lib/test-pojos-1.23.0.jar");
     }
 
     @Test
