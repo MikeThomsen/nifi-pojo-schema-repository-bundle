@@ -115,7 +115,7 @@
                 <artifactId>maven-dependency-plugin</artifactId>
                 <executions>
                     <execution>
-                        <phase>install</phase>
+                        <phase>compile</phase>
                         <goals>
                             <goal>copy-dependencies</goal>
                         </goals>

@@ -39,6 +39,7 @@ public class PojoSchemaRegistryService extends AbstractControllerService impleme
         .name("pojo-schema-reg-extension-jars")
         .displayName("Extension JARs")
         .description("A comma-separated list of Java JAR files to be loaded for schema generation.")
+        .expressionLanguageSupported(ExpressionLanguageScope.VARIABLE_REGISTRY)
         .dynamicallyModifiesClasspath(true)
         .defaultValue("")
         .addValidator(StandardValidators.FILE_EXISTS_VALIDATOR)
