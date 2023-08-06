@@ -70,4 +70,16 @@ public class FinancialTransaction {
     public void setPaymentService(PaymentService paymentService) {
         this.paymentService = paymentService;
     }
+
+    @Override
+    public String toString() {
+        return "FinancialTransaction{" +
+                "sender=" + sender +
+                ", receiver=" + receiver +
+                ", amount=" + amount +
+                ", sendDate=" + sendDate +
+                ", receiveDate=" + receiveDate +
+                ", paymentService=" + paymentService +
+                '}';
+    }
 }

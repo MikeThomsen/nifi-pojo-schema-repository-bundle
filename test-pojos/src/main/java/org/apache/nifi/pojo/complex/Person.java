@@ -61,4 +61,15 @@ public class Person {
     public void setMailingAddress(Location mailingAddress) {
         this.mailingAddress = mailingAddress;
     }
+
+    @Override
+    public String toString() {
+        return "Person{" +
+                "firstName='" + firstName + '\'' +
+                ", middleName='" + middleName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", dateOfBirth=" + dateOfBirth +
+                ", mailingAddress=" + mailingAddress +
+                '}';
+    }
 }

@@ -26,4 +26,12 @@ public class PaymentService {
     public void setServiceLocation(Location serviceLocation) {
         this.serviceLocation = serviceLocation;
     }
+
+    @Override
+    public String toString() {
+        return "PaymentService{" +
+                "name='" + name + '\'' +
+                ", serviceLocation=" + serviceLocation +
+                '}';
+    }
 }

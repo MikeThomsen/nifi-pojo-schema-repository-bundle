@@ -6,13 +6,16 @@ public class Location {
     private String province;
     private String country;
 
+    private String zipCode;
+
     public Location() {}
 
-    public Location(String streetAddress, String city, String province, String country) {
+    public Location(String streetAddress, String city, String province, String country, String zipCode) {
         this.streetAddress = streetAddress;
         this.city = city;
         this.province = province;
         this.country = country;
+        this.zipCode = zipCode;
     }
 
     public String getStreetAddress() {
@@ -45,5 +48,24 @@ public class Location {
 
     public void setCountry(String country) {
         this.country = country;
+    }
+
+    public String getZipCode() {
+        return zipCode;
+    }
+
+    public void setZipCode(String zipCode) {
+        this.zipCode = zipCode;
+    }
+
+    @Override
+    public String toString() {
+        return "Location{" +
+                "streetAddress='" + streetAddress + '\'' +
+                ", city='" + city + '\'' +
+                ", province='" + province + '\'' +
+                ", country='" + country + '\'' +
+                ", zipCode='" + zipCode + '\'' +
+                '}';
     }
 }
