@@ -39,7 +39,7 @@ public class PojoSchemaRegistryService extends AbstractControllerService impleme
         .name("pojo-schema-reg-extension-jars")
         .displayName("Extension JARs")
         .description("A comma-separated list of Java JAR files to be loaded for schema generation.")
-        .expressionLanguageSupported(ExpressionLanguageScope.VARIABLE_REGISTRY)
+        .expressionLanguageSupported(ExpressionLanguageScope.ENVIRONMENT)
         .dynamicallyModifiesClasspath(true)
         .defaultValue("")
         .addValidator(StandardValidators.FILE_EXISTS_VALIDATOR)
@@ -106,7 +106,7 @@ public class PojoSchemaRegistryService extends AbstractControllerService impleme
     protected PropertyDescriptor getSupportedDynamicPropertyDescriptor(String name) {
         return new PropertyDescriptor.Builder()
                 .name(name)
-                .expressionLanguageSupported(ExpressionLanguageScope.VARIABLE_REGISTRY)
+                .expressionLanguageSupported(ExpressionLanguageScope.ENVIRONMENT)
                 .dynamic(true)
                 .addValidator(Validator.VALID)
 //                .addValidator((subject, input, context) -> {
