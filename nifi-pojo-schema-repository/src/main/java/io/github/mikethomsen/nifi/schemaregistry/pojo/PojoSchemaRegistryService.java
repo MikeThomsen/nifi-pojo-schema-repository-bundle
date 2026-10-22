@@ -1,4 +1,4 @@
-package org.apache.nifi.pojo;
+package io.github.mikethomsen.nifi.schemaregistry.pojo;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.avro.AvroFactory;

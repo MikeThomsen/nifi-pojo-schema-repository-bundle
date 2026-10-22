@@ -1,4 +1,4 @@
-package org.apache.nifi.pojo;
+package io.github.mikethomsen.nifi.schemaregistry.pojo;
 
 import org.apache.nifi.schema.access.SchemaNotFoundException;
 import org.apache.nifi.serialization.record.RecordField;
@@ -34,7 +34,7 @@ public class PojoSchemaRegistryServiceTest {
 
     @Test
     public void testAvroGeneratedObject() {
-        testRunner.setProperty(service, "message", "org.apache.nifi.pojo.MessageRecord");
+        testRunner.setProperty(service, "message", "io.github.mikethomsen.nifi.schemaregistry.pojo.MessageRecord");
         testRunner.enableControllerService(service);
 
         SchemaIdentifier identifier = new StandardSchemaIdentifier.Builder()
@@ -50,7 +50,7 @@ public class PojoSchemaRegistryServiceTest {
 
     @Test
     public void testJacksonGeneratedSchema() {
-        testRunner.setProperty(service, "user", "org.apache.nifi.pojo.User");
+        testRunner.setProperty(service, "user", "io.github.mikethomsen.nifi.schemaregistry.pojo.User");
         testRunner.enableControllerService(service);
 
         SchemaIdentifier identifier = new StandardSchemaIdentifier.Builder()
@@ -67,7 +67,7 @@ public class PojoSchemaRegistryServiceTest {
 
     @Test
     public void testAnnotatedPojoSchema() {
-        testRunner.setProperty(service, "object", "org.apache.nifi.pojo.AnnotatedObject");
+        testRunner.setProperty(service, "object", "io.github.mikethomsen.nifi.schemaregistry.pojo.AnnotatedObject");
         testRunner.enableControllerService(service);
 
         SchemaIdentifier identifier = new StandardSchemaIdentifier.Builder()
@@ -88,7 +88,7 @@ public class PojoSchemaRegistryServiceTest {
 
     @Test
     public void testUnknownSchemaNameThrows() {
-        testRunner.setProperty(service, "user", "org.apache.nifi.pojo.User");
+        testRunner.setProperty(service, "user", "io.github.mikethomsen.nifi.schemaregistry.pojo.User");
         testRunner.enableControllerService(service);
 
         SchemaIdentifier identifier = new StandardSchemaIdentifier.Builder()
@@ -101,7 +101,7 @@ public class PojoSchemaRegistryServiceTest {
     public void testMultipleExtensionJars() {
         testRunner.setProperty(service, PojoSchemaRegistryService.EXTENSION_JARS,
                 "target/lib/test-pojos-2.12.0.jar, target/lib/avro-1.12.2.jar");
-        testRunner.setProperty(service, "user", "org.apache.nifi.pojo.User");
+        testRunner.setProperty(service, "user", "io.github.mikethomsen.nifi.schemaregistry.pojo.User");
         testRunner.assertValid(service);
         testRunner.enableControllerService(service);
 
@@ -119,7 +119,7 @@ public class PojoSchemaRegistryServiceTest {
 
     @Test
     public void testInstanceSchemaFieldUsesGeneratedSchema() {
-        testRunner.setProperty(service, "holder", "org.apache.nifi.pojo.CachedSchemaHolder");
+        testRunner.setProperty(service, "holder", "io.github.mikethomsen.nifi.schemaregistry.pojo.CachedSchemaHolder");
         testRunner.enableControllerService(service);
 
         SchemaIdentifier identifier = new StandardSchemaIdentifier.Builder()
@@ -132,7 +132,7 @@ public class PojoSchemaRegistryServiceTest {
 
     @Test
     public void testDisableClearsSchemas() {
-        testRunner.setProperty(service, "user", "org.apache.nifi.pojo.User");
+        testRunner.setProperty(service, "user", "io.github.mikethomsen.nifi.schemaregistry.pojo.User");
         testRunner.enableControllerService(service);
         testRunner.disableControllerService(service);
 
