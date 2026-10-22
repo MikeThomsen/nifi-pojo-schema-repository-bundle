@@ -1,5 +1,6 @@
 package org.apache.nifi.pojo;
 
+import org.apache.nifi.schema.access.SchemaNotFoundException;
 import org.apache.nifi.serialization.record.RecordField;
 import org.apache.nifi.serialization.record.RecordSchema;
 import org.apache.nifi.serialization.record.SchemaIdentifier;
@@ -16,6 +17,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class PojoSchemaRegistryServiceTest {
@@ -82,5 +84,61 @@ public class PojoSchemaRegistryServiceTest {
         assertTrue(aliasedField.isPresent());
         assertTrue(nullable.isPresent());
         assertTrue(renamed.isPresent());
+    }
+
+    @Test
+    public void testUnknownSchemaNameThrows() {
+        testRunner.setProperty(service, "user", "org.apache.nifi.pojo.User");
+        testRunner.enableControllerService(service);
+
+        SchemaIdentifier identifier = new StandardSchemaIdentifier.Builder()
+                .name("nope")
+                .build();
+        assertThrows(SchemaNotFoundException.class, () -> service.retrieveSchema(identifier));
+    }
+
+    @Test
+    public void testMultipleExtensionJars() {
+        testRunner.setProperty(service, PojoSchemaRegistryService.EXTENSION_JARS,
+                "target/lib/test-pojos-2.12.0.jar, target/lib/avro-1.12.2.jar");
+        testRunner.setProperty(service, "user", "org.apache.nifi.pojo.User");
+        testRunner.assertValid(service);
+        testRunner.enableControllerService(service);
+
+        SchemaIdentifier identifier = new StandardSchemaIdentifier.Builder()
+                .name("user")
+                .build();
+        assertDoesNotThrow(() -> service.retrieveSchema(identifier));
+    }
+
+    @Test
+    public void testUnknownClassIsInvalid() {
+        testRunner.setProperty(service, "missing", "com.example.DoesNotExist");
+        testRunner.assertNotValid(service);
+    }
+
+    @Test
+    public void testInstanceSchemaFieldUsesGeneratedSchema() {
+        testRunner.setProperty(service, "holder", "org.apache.nifi.pojo.CachedSchemaHolder");
+        testRunner.enableControllerService(service);
+
+        SchemaIdentifier identifier = new StandardSchemaIdentifier.Builder()
+                .name("holder")
+                .build();
+        AtomicReference<RecordSchema> schema = new AtomicReference<>();
+        assertDoesNotThrow(() -> schema.set(service.retrieveSchema(identifier)));
+        assertTrue(schema.get().getField("name").isPresent());
+    }
+
+    @Test
+    public void testDisableClearsSchemas() {
+        testRunner.setProperty(service, "user", "org.apache.nifi.pojo.User");
+        testRunner.enableControllerService(service);
+        testRunner.disableControllerService(service);
+
+        SchemaIdentifier identifier = new StandardSchemaIdentifier.Builder()
+                .name("user")
+                .build();
+        assertThrows(SchemaNotFoundException.class, () -> service.retrieveSchema(identifier));
     }
 }
