@@ -13,6 +13,9 @@
     <version>1.0.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
+    <name>NiFi POJO Schema Registry Service</name>
+    <description>NiFi controller service that generates record schemas from Java classes in user-supplied JARs.</description>
+
     <dependencies>
         <dependency>
             <groupId>org.apache.nifi</groupId>

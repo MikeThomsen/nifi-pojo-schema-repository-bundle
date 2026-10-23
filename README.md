@@ -58,6 +58,22 @@ Enabling the service loads classes from the configured JARs, and reading an Avro
 | `nifi-pojo-schema-repository-nar` | Packages the service as a NAR on top of `nifi-standard-services-api-nar` |
 | `test-pojos` | Sample classes used by the tests: an Avro-generated record, plain and annotated POJOs, and a nested model |
 
+## Releasing to Maven Central
+
+The `release` profile builds sources and javadoc jars, signs every artifact with GPG subkey `BC52AF63375B0D4C`, and uploads the bundle to the [Central Publisher Portal](https://central.sonatype.com). `test-pojos` is not published.
+
+Prerequisites: a Central Portal user token in `~/.m2/settings.xml` under server id `central`, and the signing subkey in your GPG keyring.
+
+```
+mvn versions:set -DnewVersion=1.0.0 -DgenerateBackupPoms=false
+mvn -P release clean deploy
+git commit -am "Release 1.0.0" && git tag v1.0.0
+mvn versions:set -DnewVersion=1.0.1-SNAPSHOT -DgenerateBackupPoms=false
+git commit -am "Prepare next development version" && git push --follow-tags
+```
+
+The upload is validated but not published automatically. Check the deployment in the portal, then click **Publish**. Releases on Maven Central are permanent. Set `MAVEN_GPG_PASSPHRASE` to sign without a passphrase prompt.
+
 ## License
 
 Apache License 2.0. See [LICENSE](LICENSE).

@@ -34,6 +34,16 @@
     <version>1.0.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
+    <name>NiFi POJO Schema Registry Test POJOs</name>
+    <description>Sample classes used by the POJO schema registry tests. Not published.</description>
+
+    <properties>
+        <!-- Test data only: excluded from Maven Central, so no sources, javadoc or signatures -->
+        <maven.source.skip>true</maven.source.skip>
+        <maven.javadoc.skip>true</maven.javadoc.skip>
+        <gpg.skip>true</gpg.skip>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>org.apache.avro</groupId>

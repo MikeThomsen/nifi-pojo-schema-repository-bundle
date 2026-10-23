@@ -1,12 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+         child.project.url.inherit.append.path="false">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>io.github.mikethomsen</groupId>
     <artifactId>nifi-pojo-schema-repository-bundle</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
+
+    <name>NiFi POJO Schema Registry Bundle</name>
+    <description>A NiFi schema registry that generates record schemas from Java classes.</description>
+    <url>https://github.com/MikeThomsen/nifi-pojo-schema-repository-bundle</url>
+
+    <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <id>mikethomsen</id>
+            <name>Mike Thomsen</name>
+            <email>mikerthomsen@gmail.com</email>
+        </developer>
+    </developers>
+
+    <scm child.scm.connection.inherit.append.path="false"
+         child.scm.developerConnection.inherit.append.path="false"
+         child.scm.url.inherit.append.path="false">
+        <connection>scm:git:https://github.com/MikeThomsen/nifi-pojo-schema-repository-bundle.git</connection>
+        <developerConnection>scm:git:git@github.com:MikeThomsen/nifi-pojo-schema-repository-bundle.git</developerConnection>
+        <url>https://github.com/MikeThomsen/nifi-pojo-schema-repository-bundle</url>
+    </scm>
 
     <properties>
         <nifi.version>2.12.0</nifi.version>
@@ -116,4 +145,74 @@
             </plugins>
         </pluginManagement>
     </build>
+
+    <profiles>
+        <!-- Builds sources and javadoc jars, signs everything and uploads to Maven Central: mvn -P release clean deploy -->
+        <profile>
+            <id>release</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-source-plugin</artifactId>
+                        <version>3.3.1</version>
+                        <executions>
+                            <execution>
+                                <id>attach-sources</id>
+                                <goals>
+                                    <goal>jar-no-fork</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                        <version>3.12.0</version>
+                        <executions>
+                            <execution>
+                                <id>attach-javadocs</id>
+                                <goals>
+                                    <goal>jar</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <version>3.2.8</version>
+                        <configuration>
+                            <!-- Release-only signing subkey; the passphrase comes from MAVEN_GPG_PASSPHRASE or a prompt -->
+                            <keyname>BC52AF63375B0D4C!</keyname>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>sign-artifacts</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.sonatype.central</groupId>
+                        <artifactId>central-publishing-maven-plugin</artifactId>
+                        <version>0.12.0</version>
+                        <extensions>true</extensions>
+                        <configuration>
+                            <publishingServerId>central</publishingServerId>
+                            <!-- Upload and validate only; publish from the Central Portal after checking the deployment -->
+                            <autoPublish>false</autoPublish>
+                            <waitUntil>validated</waitUntil>
+                            <excludeArtifacts>
+                                <artifact>test-pojos</artifact>
+                            </excludeArtifacts>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>
