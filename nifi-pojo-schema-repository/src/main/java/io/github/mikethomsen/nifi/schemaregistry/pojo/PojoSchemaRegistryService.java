@@ -69,7 +69,6 @@ public class PojoSchemaRegistryService extends AbstractControllerService impleme
         .displayName("Extension JARs")
         .description("A comma-separated list of Java JAR files, or directories of JAR files, to be loaded for schema generation.")
         .expressionLanguageSupported(ExpressionLanguageScope.ENVIRONMENT)
-        .dynamicallyModifiesClasspath(true)
         .identifiesExternalResource(ResourceCardinality.MULTIPLE, ResourceType.FILE, ResourceType.DIRECTORY)
         .required(true)
         .build();

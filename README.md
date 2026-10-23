@@ -31,6 +31,8 @@ Each **dynamic property** defines one schema:
 
 Class names are checked against the configured JARs when the service is validated, so a typo shows up before you enable the service.
 
+The JARs are read each time the service is validated or enabled, and nothing from them stays loaded afterwards. After replacing a JAR, disable and re-enable the service to pick up the change.
+
 ### Which schema is used
 
 1. **Avro-generated classes** (anything with a `public static Schema SCHEMA$` field) use their embedded schema as-is.
