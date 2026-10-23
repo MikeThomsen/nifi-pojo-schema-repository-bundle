@@ -1,4 +1,4 @@
-package org.apache.nifi.pojo.complex;
+package io.github.mikethomsen.nifi.schemaregistry.pojo.complex;
 
 public class Location {
     private String streetAddress;

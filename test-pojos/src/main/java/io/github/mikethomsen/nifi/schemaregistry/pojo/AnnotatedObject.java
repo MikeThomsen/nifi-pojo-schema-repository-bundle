@@ -1,4 +1,4 @@
-package org.apache.nifi.pojo;
+package io.github.mikethomsen.nifi.schemaregistry.pojo;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.apache.avro.reflect.AvroAlias;

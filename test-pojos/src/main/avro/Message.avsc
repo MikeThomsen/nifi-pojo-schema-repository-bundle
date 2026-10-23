@@ -1,7 +1,7 @@
 {
   "type": "record",
   "name": "MessageRecord",
-  "namespace": "org.apache.nifi.pojo",
+  "namespace": "io.github.mikethomsen.nifi.schemaregistry.pojo",
   "fields": [
     {
       "name": "from",

@@ -1,4 +1,4 @@
-package org.apache.nifi.pojo;
+package io.github.mikethomsen.nifi.schemaregistry.pojo;
 
 import org.apache.avro.Schema;
 
