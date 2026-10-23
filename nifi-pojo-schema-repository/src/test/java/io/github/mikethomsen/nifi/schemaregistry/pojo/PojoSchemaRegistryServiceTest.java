@@ -29,7 +29,7 @@ public class PojoSchemaRegistryServiceTest {
         testRunner = TestRunners.newTestRunner(NoOpProcessor.class);
         service = new PojoSchemaRegistryService();
         testRunner.addControllerService("service", service);
-        testRunner.setProperty(service, PojoSchemaRegistryService.EXTENSION_JARS, "target/lib/test-pojos-2.12.0.jar");
+        testRunner.setProperty(service, PojoSchemaRegistryService.EXTENSION_JARS, "target/lib/test-pojos-1.0.0-SNAPSHOT.jar");
     }
 
     @Test
@@ -100,7 +100,7 @@ public class PojoSchemaRegistryServiceTest {
     @Test
     public void testMultipleExtensionJars() {
         testRunner.setProperty(service, PojoSchemaRegistryService.EXTENSION_JARS,
-                "target/lib/test-pojos-2.12.0.jar, target/lib/avro-1.12.2.jar");
+                "target/lib/test-pojos-1.0.0-SNAPSHOT.jar, target/lib/avro-1.12.2.jar");
         testRunner.setProperty(service, "user", "io.github.mikethomsen.nifi.schemaregistry.pojo.User");
         testRunner.assertValid(service);
         testRunner.enableControllerService(service);
