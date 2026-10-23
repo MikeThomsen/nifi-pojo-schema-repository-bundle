@@ -1,0 +1,2 @@
+# Build and release with JDK 21. Run `sdk env` in this directory to switch.
+java=21.0.2-graalce

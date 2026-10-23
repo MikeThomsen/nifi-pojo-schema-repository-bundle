@@ -1,0 +1,59 @@
+NiFi POJO Schema Registry NAR
+Copyright 2020-2026 Mike Thomsen
+
+This product is licensed under the Apache License, Version 2.0.
+
+This product includes software developed at
+The Apache Software Foundation (https://www.apache.org/).
+
+==============================================================================
+
+The following NOTICE information applies to components bundled in this NAR.
+
+------------------------------------------------------------------------------
+Apache Avro
+Copyright 2009-2026 The Apache Software Foundation
+
+------------------------------------------------------------------------------
+Apache Commons Codec
+Copyright 2002-2025 The Apache Software Foundation
+
+Apache Commons Compress
+Copyright 2002-2025 The Apache Software Foundation
+
+Apache Commons CSV
+Copyright 2005-2025 The Apache Software Foundation
+
+Apache Commons IO
+Copyright 2002-2026 The Apache Software Foundation
+
+Apache Commons Lang
+Copyright 2001-2025 The Apache Software Foundation
+
+Apache Commons Text
+Copyright 2014-2025 The Apache Software Foundation
+
+------------------------------------------------------------------------------
+Apache NiFi (nifi-avro-record-utils, nifi-standard-record-utils)
+Copyright 2026 Apache NiFi Project
+
+------------------------------------------------------------------------------
+Jackson JSON processor (jackson-annotations, jackson-core, jackson-databind,
+jackson-dataformat-avro)
+
+Jackson is a high-performance, Free/Open Source JSON processing library.
+It was originally written by Tatu Saloranta (tatu.saloranta@iki.fi), and has
+been in development since 2007.
+It is currently developed by a community of developers.
+
+Copyright 2007-, Tatu Saloranta (tatu.saloranta@iki.fi)
+
+Jackson 2.x core and extension components are licensed under Apache License 2.0.
+
+jackson-core bundles a shaded copy of FastDoubleParser
+<https://github.com/wrandelshofer/FastDoubleParser>, available under an MIT
+license, Copyright (c) 2023 Werner Randelshofer, Switzerland.
+
+jackson-core bundles a copy of the Schubfach number writing code
+<https://github.com/c4f7fcce9cb06515/Schubfach>, available under an MIT
+license, Copyright 2018-2020 Raffaello Giulietti.

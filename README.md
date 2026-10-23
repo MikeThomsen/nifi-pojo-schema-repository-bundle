@@ -9,6 +9,8 @@ A NiFi controller service that provides record schemas generated from Java class
 
 ## Building
 
+Build and release with JDK 21, the version NiFi 2.x runs on. With [SDKMAN!](https://sdkman.io), `sdk env` in the project directory switches to the JDK pinned in `.sdkmanrc`.
+
 ```
 mvn clean verify
 ```
@@ -62,7 +64,7 @@ Enabling the service loads classes from the configured JARs, and reading an Avro
 
 The `release` profile builds sources and javadoc jars, signs every artifact with GPG subkey `BC52AF63375B0D4C`, and uploads the bundle to the [Central Publisher Portal](https://central.sonatype.com). `test-pojos` is not published.
 
-Prerequisites: a Central Portal user token in `~/.m2/settings.xml` under server id `central`, and the signing subkey in your GPG keyring.
+Prerequisites: JDK 21 (`sdk env`), a Central Portal user token in `~/.m2/settings.xml` under server id `central`, and the signing subkey in your GPG keyring.
 
 ```
 mvn versions:set -DnewVersion=1.0.0 -DgenerateBackupPoms=false
